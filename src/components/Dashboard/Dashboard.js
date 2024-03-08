@@ -11,6 +11,67 @@ function Dashboard() {
     { period: "All time", count: 12 },
   ];
 
+  const options = {
+    acceptAllDevices: true,
+  };
+
+  // function bluetoothConnect() {
+  //   alert("attempting to connect to bluetooth...");
+  //   navigator.bluetooth
+  //     .requestDevice(options)
+  //     .then((device) => {
+  //       console.log("Device selected:", device);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error during Bluetooth device selection:", error);
+  //     });
+  // }
+
+  function bluetoothConnect() {
+    let ssidCharacteristic, passwordCharacteristic;
+
+    alert("attempting to connect to bluetooth...");
+    navigator.bluetooth
+      .requestDevice({
+        filters: [
+          {
+            services: ["991cbd4a-2e1b-4182-bc44-ca34489f6324"], // Custom WiFi Service UUID
+          },
+        ],
+      })
+      .then((device) => {
+        console.log("Device selected:", device);
+      })
+      .then((server) =>
+        server.getPrimaryService("991cbd4a-2e1b-4182-bc44-ca34489f6324")
+      )
+      .then((service) => {
+        // Get the WiFi SSID and Password characteristics
+        return Promise.all([
+          service.getCharacteristic("abcd1234-ab12-cd34-ef56-abcdef123456"),
+          service.getCharacteristic("abcd5678-ab12-cd34-ef56-abcdef123457"),
+        ]);
+      })
+      .then((characteristics) => {
+        [ssidCharacteristic, passwordCharacteristic] = characteristics;
+        return Promise.all([
+          ssidCharacteristic.readValue(),
+          passwordCharacteristic.readValue(),
+        ]);
+      })
+      .then((values) => {
+        const ssidValue = new TextDecoder().decode(values[0]);
+        const passwordValue = new TextDecoder().decode(values[1]);
+
+        document.getElementById(
+          "wifiInfo"
+        ).innerHTML = `SSID: ${ssidValue}<br>Password: ${passwordValue}`;
+      })
+      .catch((error) => {
+        console.error("Error during Bluetooth device selection:", error);
+      });
+  }
+
   return (
     <div className="dashboard-container">
       <h1>Welcome, user!</h1>
@@ -24,6 +85,10 @@ function Dashboard() {
             <button>View Trend</button>
           </div>
         ))}
+      </div>
+      <div>
+        <button onClick={bluetoothConnect}>"Connect to bluetooth"</button>
+        <div id="wifiInfo"></div>
       </div>
     </div>
   );

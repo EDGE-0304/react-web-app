@@ -1,0 +1,45 @@
+.login-container {
+  width: 100%;
+  max-width: 340px; /* Adjust width as needed */
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+}
+
+.login-form h2 {
+  margin-bottom: 20px;
+}
+
+.login-form input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px; /* Spacing between inputs */
+  border: 1px solid #ccc;
+  border-radius: 4px; /* Rounded corners */
+  box-sizing: border-box; /* Makes sure the padding doesn't affect the overall width */
+}
+
+.login-form .buttons {
+  display: flex;
+  justify-content: space-between; /* Spacing between buttons */
+  margin-top: 20px; /* Spacing above the button group */
+}
+
+.login-form button {
+  border: none;
+  padding: 10px 20px;
+  border-radius: 20px; /* Rounded pill shape */
+  cursor: pointer;
+  outline: none;
+}
+
+.primary-button {
+  background-color: #007bff; /* Bootstrap primary color */
+  color: white;
+}
+
+.secondary-button {
+  background-color: transparent; /* No background for secondary button */
+  color: #007bff;
+  border: 1px solid #007bff; /* Add border to match primary button color */
+}

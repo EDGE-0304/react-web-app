@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import "./Login.css";
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useUser } from '../../UserContext'; // Adjust the import path as necessary
+
 
 function Login() {
   // State for username, email, and password
-  const [userCredentials, setUserCredentials] = useState({
-    username: "",
-    email: "",
-    password: "",
-  });
+  const { userCredentials, setUserCredentials } = useUser();
+  const navigate = useNavigate(); // Initialize useNavigate
 
   // Function to handle input changes
   const handleChange = (event) => {
@@ -18,8 +18,35 @@ function Login() {
   // Function to handle form submission
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Submit logic
-    console.log(userCredentials);
+
+    const url = 'https://bugracket.nn.r.appspot.com/users/sign-up';
+
+    const payload = {
+      name: userCredentials.username,
+      email: userCredentials.email,
+      password: userCredentials.password,
+    };
+
+    console.log(payload);
+
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload)
+    })
+    .then(response => {
+      if (response.ok) {
+        console.log("Successful")
+        navigate('/dashboard'); // Navigate to the success page
+
+      } else {
+        throw new Error(response.body.message || 'Invalid user');
+      }
+    })
+    .catch(error => console.error(error));
+
   };
 
   // Render the form

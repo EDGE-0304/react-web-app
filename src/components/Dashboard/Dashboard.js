@@ -1,8 +1,14 @@
 import React from "react";
 import "./Dashboard.css";
+import { useUser } from '../../UserContext'; // Adjust the import path as necessary
+
 
 function Dashboard() {
   // can make this dynamic by passing props or fetching from an API
+  const { userCredentials, setUserCredentials } = useUser();
+
+  console.log(userCredentials);
+
   const stats = [
     { period: "Today", count: 0 },
     { period: "This week", count: 0 },
